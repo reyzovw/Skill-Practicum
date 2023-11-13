@@ -1,0 +1,7 @@
+venv/
+idea
+test_skills.db
+test_users.db
+test_feed.db
+test.py
+.idea/

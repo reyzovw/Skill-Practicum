@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Skill Practicum | Новости</title>
+</head>
+<body>
+    <form action="" method="POST">
+        <input name="text" required type="text" placeholder="Поделитесь навыком или полезной информацией">
+        <input type="submit" value="Выложить">
+    </form>
+    {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="inform">
+                        <p>{{ message }}</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+    <br>
+
+    {% for post in posts %}
+        <a href="profile/{{ users.get_user_by_id(post[1])[1] }}">@{{ users.get_user_by_id(post[1])[1] }}</a>
+        <p>{{ post[2] }}</p>
+        <br>
+    {% endfor %}
+</body>
+</html>
