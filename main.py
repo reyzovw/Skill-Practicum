@@ -50,7 +50,8 @@ password = None
 def verify():
     global valid_code, username, email, password
     if request.method == "POST":
-        if request.form.get('login') is not None and request.form.get('email') is not None and request.form.get("password") is not None:
+        if request.form.get('login') is not None and request.form.get('email') is not None and request.form.get(
+                "password") is not None:
             username = request.form.get('login')
             email = request.form.get('email')
             password = request.form.get('password')
@@ -68,4 +69,4 @@ def verify():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)
