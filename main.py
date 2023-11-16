@@ -1,8 +1,11 @@
 from loader import *
+from time import sleep
 
 
 @app.route("/")
 def index():
+    if session.get('authorized') and session.get('username') is not None and session.get('password_hash') is not None:
+        return redirect(url_for('feed_page'))
     return redirect(url_for("login"))
 
 
@@ -16,12 +19,9 @@ def login():
             session['authorized'] = True
             session['username'] = request.form.get("login")
             session['password_hash'] = request.form.get("password")
-            print(session.items())
             if users.login_user(session.get('username'), session.get('password_hash')):
                 return redirect(url_for("feed_page"))
             return redirect(url_for('login'))
-    if session.get('authorized') and session.get("username") is not None:
-        return redirect(url_for('feed_page'))
     return render_template("login.html")
 
 
@@ -66,6 +66,16 @@ def verify():
         except Exception:
             ...
         return render_template("verify.html")
+
+
+@app.route("/profile/<string:username>")
+def user_profile(username):
+    return "Coming soon..."
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return render_template("not_found.html")
 
 
 if __name__ == "__main__":
