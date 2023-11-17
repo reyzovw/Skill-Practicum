@@ -5,12 +5,168 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Skill Practicum | Новости</title>
+    <title>Factorial | Лента</title>
+    <style>
+        body {
+            background-color: #14131E;
+            margin: 0;
+        }
+        .input-feed{
+            font-size: 16px;
+            padding: 0 0 0 15px;
+            font-family: "VK Sans Display";
+            font-weight: 700;
+            color: rgba(255, 255, 255, 1);
+            width: 380px;
+            height: 61px;
+            background: black;
+            border: 1px solid white;
+            margin-top: 40px;
+            margin-left: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+        .input-feed::placeholder{
+            color: white;
+        }
+        .post{
+            font-size: 16px;
+            font-family: "VK Sans Display";
+            font-weight: 700;
+            color: rgba(255, 255, 255, 1);
+            width: 150px;
+            height: 61px;
+            background: black;
+            border: 1px solid white;
+            margin-left: 18px;
+            border-radius: 16px;
+            cursor: pointer;
+        }
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+        }
+
+        .icon {
+            margin-right: 10px;
+        }
+
+        .factorial {
+            font-size: 40px;
+            font-family: "VK Sans Display";
+            font-weight: 700;
+            color: rgba(255, 255, 255, 1);
+            margin: 0;
+        }
+
+        .profile-container {
+            position: relative;
+        }
+
+        .profile-pic {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+        }
+
+        .profile-background {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 70%;
+            height: 70%;
+            background-color: white; /* Цвет фона (можно изменить) */
+            border-radius: 100%;
+            z-index: -1;
+        }
+       .random-post-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 45vh; /* Высота вьюпорта (можно изменить) */
+        }
+
+        .random-post {
+            width: 548px;
+            height: 340px;
+            background: #0D0D0D;
+            border-radius: 31px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            margin-bottom: 15px; /* Добавлено для отступа между постами */
+            position: relative; /* Добавлено для позиционирования внутренних элементов */
+        }
+
+
+
+        .ego-pic {
+            width: 52px;
+            height: 52px;
+            border-radius: 26px;
+            margin-top: 20px;
+            margin-left: 10px;
+        }
+
+        .username {
+            margin-top: 20px;
+            margin-left: 8px;
+            position: absolute;
+            text-decoration: none;
+            color: #6BA6FF;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .username:hover {
+            text-decoration: underline;
+        }
+
+        .post-text {
+            margin-left: 10px;
+        }
+        .test {
+            background-color: #0D0D0D;
+            width: 555px;
+            height: 340px;
+            border-radius: 31px;
+            margin-bottom: 25px;
+            color: white;
+            font-size: 16px;
+            font-family: "VK Sans Display";
+            font-weight: 400;
+        }
+        .datetime{
+            color: #5C5C5C;
+            position: absolute;
+            margin-left: 70px;
+            margin-top: -35px;
+        }
+        .likes{
+            margin-left: 10px;
+            margin-top: 110px;
+            position: absolute;
+        }
+    </style>
 </head>
 <body>
+<div class="nav">
+    <img class="icon" src="static/images/star.png" alt="Star Icon">
+    <div>
+        <p class="factorial">FACTORIAL</p>
+    </div>
+    <div class="profile-container">
+        <div class="profile-background"></div>
+        <a href="/profile/{{ session.get('username') }}" class="profile-link">
+            <img class="profile-pic" src="data:image/png;base64,{{ users.get_user_by_username(session.get('username'))[4] }}" alt="Not loaded :(">
+        </a>
+    </div>
+</div>
     <form action="" method="POST">
-        <input name="text" required type="text" placeholder="Поделитесь навыком или полезной информацией">
-        <input type="submit" value="Выложить">
+        <textarea name="text" required class="input-feed" cols="40" rows="3" placeholder="Поделитесь полезной информацией"></textarea>
+        <input type="submit" class="post" value="Выложить">
     </form>
     {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -20,14 +176,24 @@
                     </div>
                 {% endfor %}
             {% endif %}
-        {% endwith %}
+    {% endwith %}
 
     <br>
 
-    {% for post in posts %}
-        <a href="profile/{{ users.get_user_by_id(post[1])[1] }}">@{{ users.get_user_by_id(post[1])[1] }}</a>
-        <p>{{ post[2] }}</p>
-        <br>
-    {% endfor %}
+    <div class="random-post-container">
+        {% for post in posts %}
+            {% if post != "Постов нету" %}
+                <div class="test">
+                    <div class="user-info">
+                        <img src="data:image/png;base64,{{ users.get_user_by_id(post[1])[4] }}" class="ego-pic">
+                        <a class="username" href="profile/{{ users.get_user_by_id(post[1])[1] }}">@{{ users.get_user_by_id(post[1])[1] }}</a>
+                        <p class="datetime">{{ post[3] }}</p>
+                    </div>
+                    <p class="post-text">{{ post[2] }}</p>
+                    <a class="likes" href="like_post/{{ post[0] }}">🤍 {{ post[4] }} лайков</a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
 </body>
 </html>

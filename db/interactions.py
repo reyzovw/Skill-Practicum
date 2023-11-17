@@ -4,6 +4,7 @@ from hashlib import sha256
 from time import time
 from random import choice
 from datetime import datetime
+from base64 import b64encode
 
 
 # ----------------- Microservices ---------------
@@ -28,7 +29,8 @@ class UsersDatabase:
             user_id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
             email TEXT UNIQUE NOT NULL,
-            password_hash TEXT NOT NULL
+            password_hash TEXT NOT NULL,
+            avatar BLOB
         )
         """
         with Query(self.__connection, query): ...
@@ -36,15 +38,19 @@ class UsersDatabase:
     def register_user(self, username: str, email: str, password: str):
         try:
             password_hash = Encrypt().to_hash(str(password))
+            avatar = open("static/images/avatar.png", 'rb')
+            avatar_bytes = b64encode(avatar.read()).decode("utf-8")
+            avatar.close()
             query = """
             INSERT INTO users (
                 username,
                 email,
-                password_hash
+                password_hash,
+                avatar
             )
-            VALUES (?, ?, ?)
+            VALUES (?, ?, ?, ?)
             """
-            with Query(self.__connection, (query, (username, email, password_hash))):
+            with Query(self.__connection, (query, (username, email, password_hash, avatar_bytes))):
                 return "Пользователь успешно зарегистрирован"
         except IntegrityError as e:
             return "Пользователь уже зарегистрирован"
@@ -117,19 +123,23 @@ class FeedManager:
                     post_id INTEGER PRIMARY KEY AUTOINCREMENT,
                     from_user_id INTEGER NOT NULL,
                     post_text TEXT NOT NULL,
-                    datetime INTEGER NOT NULL
+                    datetime INTEGER NOT NULL,
+                    likes INTEGER,
+                    likes_by TEXT
                 )
                 """
+        # добавить лайки и кто лайкал
         with Query(self.__connection, query): ...
 
     def create_post(self, from_user_id: int, text: str):
+        default_likes_by = []
         unix_time = int(str(time()).split(".")[0])
-        date = datetime.utcfromtimestamp(unix_time).strftime('%Y-%m-%d %H:%M')
+        date = datetime.utcfromtimestamp(unix_time).strftime('%d-%m в %H:%M')
         query = """
-        INSERT INTO feed (from_user_id, post_text, datetime) VALUES (?, ?, ?)
+        INSERT INTO feed (from_user_id, post_text, datetime, likes, likes_by) VALUES (?, ?, ?, 0, ?)
         """
         try:
-            with Query(self.__connection, (query, (from_user_id, text, date))): ...
+            with Query(self.__connection, (query, (from_user_id, text, date, str(default_likes_by)))): ...
             return "Пост был выложен"
         except Exception as e:
             return f"При выкладывании поста произошла ошибка: {e}"
@@ -140,9 +150,9 @@ class FeedManager:
 
     def get_random_posts(self):
         posts = set()
-        with Query(self.__connection, "SELECT * FROM feed LIMIT 50") as result:
+        with Query(self.__connection, "SELECT * FROM feed LIMIT 10") as result:
             try:
-                for _ in range(10):
+                for _ in range(len(result)):
                     posts.add(choice(result))
             except IndexError:
                 return ["Постов нету"] # в массиве что бы не было ошибки

@@ -6,20 +6,76 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Skill Practicum | Подтверждение аккаунта</title>
+    <style>
+        body {
+            background-color: #14131E;
+            margin: 0;
+        }
+
+        .text{
+            font-size: 64px;
+            font-family: "VK Sans Display";
+            font-weight: 700;
+            color: rgba(255, 255, 255, 1);
+        }
+
+        .container{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 85vh;
+        }
+
+        .code{
+            width: 260px;
+            margin-bottom: 10px;
+            height: 45px;
+            background-color: #A49DFA;
+            border: none;
+            border-radius: 3px;
+        }
+        .code:focus{
+            outline: none;
+        }
+        .code, .confirm, .error-message{
+            font-size: 24px;
+            font-family: "VK Sans Display";
+            font-weight: 700;
+            color: black;
+        }
+        .code::placeholder {
+            color: black;
+        }
+        .confirm{
+            width: 264px;
+            height: 45px;
+            background-color: #A49DFA;
+            border: none;
+            border-radius: 3px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .error-message{
+            color: #FF5F5F
+        }
+    </style>
 </head>
 <body>
+<div class="container">
+    <p class="text">Email validation</p>
     <form action="" method="post">
-        <input name="verif_code" required type="text" placeholder="Код">
-        <input value="Подтвердить" type="submit">
+        <input name="verif_code" class="code" required type="text" placeholder="Code">
+        <br>
+        <input value="Confirm" class="confirm" type="submit">
     </form>
     {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="inform">
-                            <p>{{ message }}</p>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
+        {% if messages %}
+            {% for message in messages %}
+                <p class="error-message">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
 </body>
 </html>

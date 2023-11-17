@@ -6,18 +6,213 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Skill Practicum | Регистрация</title>
+    <style>
+        body {
+            background-color: #14131E;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .center-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 50vh;
+        }
+
+        .factorial-name {
+            font-size: 64px;
+            font-family: "VK Sans Display";
+            font-weight: 700;
+            color: rgba(255, 255, 255, 1);
+            margin-bottom: 20px;
+        }
+
+        .login-form {
+            text-align: center;
+        }
+
+        .login{
+            width: 260px;
+            margin-bottom: 10px;
+            height: 45px;
+            background-color: #A49DFA;
+            border: none;
+            border-radius: 3px;
+        }
+        .password{
+            width: 260px;
+            height: 45px;
+            background-color: #A49DFA;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 3px;
+        }
+        .email{
+            width: 260px;
+            height: 45px;
+            background-color: #A49DFA;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 3px;
+        }
+        .signup{
+            width: 264px;
+            height: 45px;
+            background-color: #A49DFA;
+            border: none;
+            border-radius: 3px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .login:focus, .password:focus, .signup:focus, .email:focus{
+            outline: none;
+        }
+        .login, .password, .signup, .error-message, .email{
+            font-size: 24px;
+            font-family: "VK Sans Display";
+            font-weight: 700;
+            color: black;
+        }
+        .login::placeholder, .password::placeholder, .signup::placeholder, .email::placeholder {
+            color: black;
+        }
+        .error-message{
+            color: #FF5F5F
+        }
+        .authors{
+            font-size: 13px;
+            font-family: "VK Sans Display";
+            font-weight: 400;
+            color: rgba(202, 202, 202, 1);
+            width: 98px;
+            height: 16px;
+        }
+        .flex-container {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-around; /* Изменено на space-between */
+          align-items: flex-end;
+          height: 362px;
+        }
+
+        .box {
+          width: 380px;
+          height: 362px;
+          box-sizing: border-box;
+          border-radius: 6px;
+          margin-bottom: 15px;
+        }
+
+        .head{
+            font-size: 44px;
+            font-family: "VK Sans Display";
+            font-weight: 700;
+            color: rgba(0, 0, 0, 1);
+            width: 281px;
+            height: 165px;
+            margin-top: 5px;
+            margin-left: 15px;
+        }
+
+        .desc{
+            font-size: 24px;
+            font-family: "VK Sans Display";
+            font-weight: 700;
+            color: rgba(0, 0, 0, 1);
+            width: 290px;
+            height: 60px;
+            margin-left: 15px;
+        }
+
+        .active{
+            transition: 0.3s;
+            width: 193px;
+            height: 55px;
+            background: black;
+            border-radius: 3px;
+            color: white;
+            font-size: 16px;
+            font-family: VK Sans Display;
+            font-weight: 700;
+            word-wrap: break-word;
+            margin-left: 25%;
+            cursor: pointer;
+        }
+        .active:hover{
+            transition: 0.3s;
+            background: white;
+            color: black;
+        }
+
+        .signupnow{
+            color: #6B53FF;
+            text-decoration: none;
+            font-size: 13px;
+            font-family: "VK Sans Display";
+            font-weight: 400;
+        }
+    </style>
 </head>
 <body>
-    <form action="verify" method="POST">
-        <h1>Регистрация</h1>
-        <br>
-        <input required type="text" name="login" placeholder="Логин">
-        <br>
-        <input required type="text" name="email" placeholder="Почта">
-        <br>
-        <input required type="text" name="password" placeholder="Пароль">
-        <br>
-        <input required type="submit" value="Зарегистрироваться">
-    </form>
+
+    <div class="center-container">
+        <h1 class="factorial-name">Factorial</h1>
+        <form action="verify" method="POST" class="login-form">
+            <input required class="login" name="login" type="text" placeholder="Login">
+            <br>
+            <input required type="email" class="email" name="email" placeholder="Email">
+            <br>
+            <input required class="password" name="password" type="password" placeholder="Password">
+            <br>
+            <input class="signup" type="submit" value="Sign up">
+            <br>
+        </form>
+        <a href="login" class="signupnow">Already have a account? Sign in now</a>
+        <p class="authors">Factorial 2023 ©</p>
+    </div>
+
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="error-message">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="flex-container">
+        <div class="box" style="background-color: #F49AFB;">
+            <p class="head">Unlock new features with Factorial.</p>
+            <p class="desc">Learn new things, ask questions, ask questions</p>
+            <form action="register">
+                <input type="submit" class="active" value="Create account now">
+            </form>
+        </div>
+        <div class="box" style="background-color: #F4FC9A;">
+            <p class="head" style="width: 350px;">Start learning new things more efficiently.</p>
+            <p class="desc" style="width: 354px;">Talk to proffesionals, ask them questions and get answer</p>
+            <form action="register">
+                <input type="submit" class="active" value="Start learning">
+            </form>
+        </div>
+        <div class="box" style="background-color: #9DCBFD;">
+            <p class="head" style="width: 334px;">Beautiful social network desing and modernity.</p>
+            <p class="desc" style="width: 355px;">The beautiful desing will make learning process enjoyable</p>
+            <form action="register">
+                <input type="submit" class="active" value="View desing">
+            </form>
+        </div>
+    </div>
+
+
 </body>
 </html>

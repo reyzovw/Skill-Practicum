@@ -28,8 +28,10 @@ def login():
 @app.route("/feed", methods=['GET', 'POST'])
 def feed_page():
     if request.method == "POST":
-        flash(feed.create_post(users.get_user_by_username(session.get('username'))[0], request.form.get('text')))
-        ...
+        if len(request.form.get("text")) >= 600:
+            flash("Текст для слишком большой")
+        else:
+            flash(feed.create_post(users.get_user_by_username(session.get('username'))[0], request.form.get('text')))
 
     posts = feed.get_random_posts()
     return render_template('feed.html', posts=posts, users=users)
@@ -70,7 +72,8 @@ def verify():
 
 @app.route("/profile/<string:username>")
 def user_profile(username):
-    return "Coming soon..."
+    user_data = users.get_user_by_username(username)
+    return render_template("profile.html", user_data=user_data)
 
 
 @app.errorhandler(404)
