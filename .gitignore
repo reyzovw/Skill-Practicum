@@ -3,5 +3,7 @@ idea
 test_skills.db
 test_users.db
 test_feed.db
-test.py
+домик.py
 .idea/
+__pycache__
+permanent.txt
