@@ -41,6 +41,8 @@ docker-compose build
 docker-compose up -d
 ```
 
+Теперь наш сайт открылся на `http://192.168.0.107:8000/` или на `http://127.0.0.1:8000/`
+
 *Если понадобилось остановить контейнер*
 ```commandline
 docker-compose stop
