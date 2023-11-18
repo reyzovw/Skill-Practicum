@@ -1,7 +1,28 @@
 version: '3'
 
 services:
-  web:
+
+  web: # сайт
     build: .
     ports:
       - "8000:5000"
+    depends_on: # поднимать только после запуска сервиса постгреса
+      postgres:
+        condition: service_healthy
+
+  postgres: # постгрес
+    image: 'postgres'
+    environment:
+      POSTGRES_DB: factorial
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: factorial
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "factorial", "-U", "admin" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:

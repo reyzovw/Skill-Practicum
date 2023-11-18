@@ -11,6 +11,7 @@ def index():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    print(users.get_user_by_username("reyzovw"))
     if request.method == 'POST':
         status = users.login_user(request.form.get('login'), request.form.get('password'))
         if not status:
